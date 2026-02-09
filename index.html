@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Chocolate Day! 🍫</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #ffe6f0;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .chocolate-container {
+            background: linear-gradient(145deg, #4a2c2a, #6d4c41);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: fadeInUp 1s ease;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .chocolate-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px;
+            background: #3e2723;
+            border-radius: 15px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .chocolate-piece {
+            aspect-ratio: 1;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .chocolate-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .chocolate-piece.flipped .chocolate-inner {
+            transform: rotateY(180deg);
+        }
+
+        .chocolate-front,
+        .chocolate-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.2),
+                        0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .chocolate-front {
+            background: linear-gradient(145deg, #6d4c41, #5d4037);
+            border: 2px solid #8d6e63;
+        }
+
+        .chocolate-back {
+            background: linear-gradient(145deg, #ff6b9d, #c2185b);
+            transform: rotateY(180deg);
+            color: white;
+            font-size: clamp(0.6rem, 2vw, 0.9rem);
+            padding: 5px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .heart {
+            position: fixed;
+            font-size: 30px;
+            animation: float 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .counter {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .reset-btn {
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: linear-gradient(145deg, #ff6b9d, #c2185b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,107,157,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,157,0.6);
+        }
+
+        .reset-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Floating hearts background */
+        .bg-heart {
+            position: fixed;
+            font-size: 20px;
+            opacity: 0.1;
+            animation: floatBg 15s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatBg {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 480px) {
+            .chocolate-grid {
+                gap: 5px;
+                padding: 8px;
+            }
+
+            .chocolate-front,
+            .chocolate-back {
+                border-radius: 5px;
+            }
+
+            .chocolate-container {
+                padding: 10px;
+            }
+        }
+
+        /* Pop-up Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c2185b 100%);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 350px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+
+        .modal-content h2 {
+            color: white;
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .modal-content p {
+            color: #ffe6f0;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 10px;
+        }
+
+        .modal-content .language {
+            color: white;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .close-modal {
+            margin-top: 25px;
+            padding: 12px 35px;
+            background: white;
+            color: #c2185b;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .close-modal:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Decorative hearts in modal */
+        .modal-heart {
+            position: absolute;
+            font-size: 30px;
+            animation: floatModal 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatModal {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(15deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💝 Happy Chocolate Day! 🍫</h1>
+        <p>Click each chocolate piece to reveal my love ❤️</p>
+    </div>
+
+    <div class="chocolate-container">
+        <div class="chocolate-grid" id="chocolateGrid"></div>
+    </div>
+
+    <div class="counter">
+        <p id="counterText">Pieces discovered: <span id="count">0</span>/24</p>
+        <button class="reset-btn" onclick="resetChocolates()">Reset All 🔄</button>
+    </div>
+
+    <!-- Modal Pop-up -->
+    <div id="loveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-heart" style="top: 10px; left: 10px;">💖</div>
+            <div class="modal-heart" style="top: 10px; right: 10px;">💕</div>
+            <div class="modal-heart" style="bottom: 10px; left: 10px;">💗</div>
+            <div class="modal-heart" style="bottom: 10px; right: 10px;">💝</div>
+            
+            <h2 id="modalMessage">I Love You</h2>
+            <p id="modalTranslation">Te Amo</p>
+            <p class="language" id="modalLanguage">(Spanish)</p>
+            <button class="close-modal" onclick="closeModal()">💖 Close</button>
+        </div>
+    </div>
+
+    <script>
+        const loveMessages = [
+            { lang: "English", text: "I Love You" },
+            { lang: "Spanish", text: "Te Amo" },
+            { lang: "French", text: "Je T'aime" },
+            { lang: "German", text: "Ich Liebe Dich" },
+            { lang: "Italian", text: "Ti Amo" },
+            { lang: "Portuguese", text: "Eu Te Amo" },
+            { lang: "Russian", text: "Я Тебя Люблю" },
+            { lang: "Japanese", text: "愛してる" },
+            { lang: "Korean", text: "사랑해" },
+            { lang: "Chinese", text: "我爱你" },
+            { lang: "Arabic", text: "أحبك" },
+            { lang: "Hindi", text: "मैं तुमसे प्यार करता हूँ" },
+            { lang: "Greek", text: "Σ'αγαπώ" },
+            { lang: "Turkish", text: "Seni Seviyorum" },
+            { lang: "Polish", text: "Kocham Cię" },
+            { lang: "Dutch", text: "Ik Hou Van Jou" },
+            { lang: "Swedish", text: "Jag Älskar Dig" },
+            { lang: "Norwegian", text: "Jeg Elsker Deg" },
+            { lang: "Finnish", text: "Rakastan Sinua" },
+            { lang: "Danish", text: "Jeg Elsker Dig" },
+            { lang: "Czech", text: "Miluji Tě" },
+            { lang: "Romanian", text: "Te Iubesc" },
+            { lang: "Hungarian", text: "Szeretlek" },
+            { lang: "Thai", text: "ฉันรักคุณ" }
+        ];
+
+        const chocolateGrid = document.getElementById('chocolateGrid');
+        const countSpan = document.getElementById('count');
+        const modal = document.getElementById('loveModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalTranslation = document.getElementById('modalTranslation');
+        const modalLanguage = document.getElementById('modalLanguage');
+        let flippedCount = 0;
+
+        // Function to show modal
+        function showModal(message) {
+            modalMessage.textContent = '❤️ I Love You ❤️';
+            modalTranslation.textContent = message.text;
+            modalLanguage.textContent = `(${message.lang})`;
+            modal.classList.add('show');
+        }
+
+        // Function to close modal
+        function closeModal() {
+            modal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Create background hearts
+        function createBgHearts() {
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'bg-heart';
+                heart.textContent = '💖';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                document.body.appendChild(heart);
+            }
+        }
+
+        // Create chocolate pieces
+        loveMessages.forEach((message, index) => {
+            const piece = document.createElement('div');
+            piece.className = 'chocolate-piece';
+            piece.innerHTML = `
+                <div class="chocolate-inner">
+                    <div class="chocolate-front"></div>
+                    <div class="chocolate-back">
+                        ${message.text}<br>
+                        <small style="font-size: 0.7em; opacity: 0.9;">(${message.lang})</small>
+                    </div>
+                </div>
+            `;
+
+            piece.addEventListener('click', function() {
+                if (!this.classList.contains('flipped')) {
+                    this.classList.add('flipped');
+                    flippedCount++;
+                    countSpan.textContent = flippedCount;
+                    createHeart(event.clientX, event.clientY);
+                    
+                    // Show modal with message
+                    showModal(message);
+                    
+                    if (flippedCount === 24) {
+                        setTimeout(() => {
+                            alert('🎉 You discovered all my love! Happy Chocolate Day, my sweetheart! 💖');
+                        }, 1000);
+                    }
+                }
+            });
+
+            chocolateGrid.appendChild(piece);
+        });
+
+        // Create floating heart on click
+        function createHeart(x, y) {
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '💞'];
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+
+        // Reset all chocolates
+        function resetChocolates() {
+            const pieces = document.querySelectorAll('.chocolate-piece');
+            pieces.forEach(piece => {
+                piece.classList.remove('flipped');
+            });
+            flippedCount = 0;
+            countSpan.textContent = '0';
+        }
+
+        // Initialize background hearts
+        createBgHearts();
+
+        // Random sparkle effect
+        setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            createHeart(x, y);
+        }, 2000);
+    </script>
+</body>
+</html>
