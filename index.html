@@ -68,13 +68,22 @@
             perspective: 1000px;
             cursor: pointer;
             position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .chocolate-piece:hover {
+            transform: scale(1.05);
+        }
+
+        .chocolate-piece:active {
+            transform: scale(0.98);
         }
 
         .chocolate-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             transform-style: preserve-3d;
         }
 
@@ -115,24 +124,30 @@
         .heart {
             position: fixed;
             font-size: 30px;
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
             pointer-events: none;
             z-index: 100;
+            will-change: transform, opacity;
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(0);
                 opacity: 0;
             }
             10% {
+                transform: translateY(-10vh) translateX(0) rotate(20deg) scale(1);
                 opacity: 1;
+            }
+            50% {
+                transform: translateY(-50vh) translateX(20px) rotate(180deg) scale(1.1);
+                opacity: 0.9;
             }
             90% {
-                opacity: 1;
+                opacity: 0.5;
             }
             100% {
-                transform: translateY(-100vh) rotate(360deg);
+                transform: translateY(-110vh) translateX(-10px) rotate(360deg) scale(0.8);
                 opacity: 0;
             }
         }
@@ -177,33 +192,43 @@
             font-size: 1rem;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255,107,157,0.4);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .reset-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,107,157,0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,107,157,0.6);
         }
 
         .reset-btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255,107,157,0.4);
         }
 
         /* Floating hearts background */
         .bg-heart {
             position: fixed;
             font-size: 20px;
-            opacity: 0.1;
-            animation: floatBg 15s linear infinite;
+            opacity: 0.15;
+            animation: floatBg 20s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             pointer-events: none;
+            will-change: transform;
         }
 
         @keyframes floatBg {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(110vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.1;
             }
             100% {
-                transform: translateY(-100vh) rotate(360deg);
+                transform: translateY(-10vh) translateX(30px) rotate(360deg);
+                opacity: 0;
             }
         }
 
@@ -235,7 +260,8 @@
             height: 100%;
             background-color: rgba(0,0,0,0.6);
             backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.4s ease;
+            transition: opacity 0.3s ease;
         }
 
         .modal.show {
@@ -252,8 +278,9 @@
             max-width: 90%;
             width: 350px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative;
+            transform-origin: center;
         }
 
         .modal-content h2 {
@@ -261,13 +288,14 @@
             font-size: clamp(2rem, 6vw, 3rem);
             margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: heartbeat 1.5s ease-in-out infinite;
+            animation: heartbeat 2s ease-in-out infinite;
         }
 
         .modal-content p {
             color: #ffe6f0;
             font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 10px;
+            transition: transform 0.3s ease;
         }
 
         .modal-content .language {
@@ -288,7 +316,7 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .close-modal:hover {
@@ -311,11 +339,14 @@
 
         @keyframes popIn {
             0% {
-                transform: scale(0.5);
+                transform: scale(0.3) rotate(-10deg);
                 opacity: 0;
             }
+            50% {
+                transform: scale(1.05) rotate(2deg);
+            }
             100% {
-                transform: scale(1);
+                transform: scale(1) rotate(0deg);
                 opacity: 1;
             }
         }
@@ -324,8 +355,17 @@
             0%, 100% {
                 transform: scale(1);
             }
-            50% {
+            10% {
                 transform: scale(1.05);
+            }
+            20% {
+                transform: scale(1);
+            }
+            30% {
+                transform: scale(1.05);
+            }
+            40% {
+                transform: scale(1);
             }
         }
 
@@ -333,23 +373,30 @@
         .modal-heart {
             position: absolute;
             font-size: 30px;
-            animation: floatModal 3s ease-in-out infinite;
+            animation: floatModal 4s ease-in-out infinite;
             opacity: 0.6;
+            will-change: transform;
         }
 
         @keyframes floatModal {
             0%, 100% {
-                transform: translateY(0) rotate(0deg);
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-15px) rotate(10deg) scale(1.1);
             }
             50% {
-                transform: translateY(-20px) rotate(15deg);
+                transform: translateY(-20px) rotate(-10deg) scale(1.15);
+            }
+            75% {
+                transform: translateY(-15px) rotate(5deg) scale(1.1);
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>💝 Happy Chocolate Day Nakhroo! </h1>
+        <h1>💝 Happy Chocolate Day Nakhroo !</h1>
         <p>Click each chocolate piece to reveal my love ❤️</p>
     </div>
 
@@ -365,10 +412,10 @@
     <!-- Modal Pop-up -->
     <div id="loveModal" class="modal">
         <div class="modal-content">
-            <div class="modal-heart" style="top: 10px; left: 10px;">💖</div>
-            <div class="modal-heart" style="top: 10px; right: 10px;">💕</div>
-            <div class="modal-heart" style="bottom: 10px; left: 10px;">💗</div>
-            <div class="modal-heart" style="bottom: 10px; right: 10px;">💝</div>
+            <div class="modal-heart" style="top: 10px; left: 10px; animation-delay: 0s;">💖</div>
+            <div class="modal-heart" style="top: 10px; right: 10px; animation-delay: 1s;">💕</div>
+            <div class="modal-heart" style="bottom: 10px; left: 10px; animation-delay: 2s;">💗</div>
+            <div class="modal-heart" style="bottom: 10px; right: 10px; animation-delay: 1.5s;">💝</div>
             
             <h2 id="modalMessage">I Love You</h2>
             <p id="modalTranslation">Te Amo</p>
@@ -460,12 +507,12 @@
                 </div>
             `;
 
-            piece.addEventListener('click', function() {
+            piece.addEventListener('click', function(e) {
                 if (!this.classList.contains('flipped')) {
                     this.classList.add('flipped');
                     flippedCount++;
                     countSpan.textContent = flippedCount;
-                    createHeart(event.clientX, event.clientY);
+                    createHeart(e.clientX, e.clientY);
                     
                     // Show modal with message
                     showModal(message);
@@ -489,12 +536,13 @@
             heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
             heart.style.left = x + 'px';
             heart.style.top = y + 'px';
-            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            heart.style.animationDuration = (Math.random() * 1.5 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 25) + 'px';
             document.body.appendChild(heart);
 
             setTimeout(() => {
                 heart.remove();
-            }, 3000);
+            }, 4500);
         }
 
         // Reset all chocolates
@@ -510,12 +558,14 @@
         // Initialize background hearts
         createBgHearts();
 
-        // Random sparkle effect
+        // Random sparkle effect with better timing
         setInterval(() => {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
-            createHeart(x, y);
-        }, 2000);
+            if (Math.random() > 0.5) { // Only create heart 50% of the time for smoother effect
+                createHeart(x, y);
+            }
+        }, 3000);
     </script>
 </body>
 </html>
